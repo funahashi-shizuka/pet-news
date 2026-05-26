@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #f5f7f8;
+        --panel: #ffffff;
+        --line: #dce4e6;
+        --text: #1d2b2f;
+        --muted: #65757a;
+        --brand: #248c96;
+        --brand-soft: #dff4f6;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Yu Gothic", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        padding: 22px 28px;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      .eyebrow {
+        margin: 0 0 4px;
+        color: var(--brand);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .button {
+        min-height: 38px;
+        border: 1px solid var(--brand);
+        border-radius: 6px;
+        background: var(--brand);
+        color: #fff;
+        padding: 0 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr) 340px;
+        gap: 16px;
+        padding: 16px;
+      }
+
+      .panel {
+        min-width: 0;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .filters,
+      .detail {
+        display: grid;
+        align-content: start;
+        gap: 14px;
+        padding: 16px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+      }
+
+      label span,
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--text);
+        outline: none;
+      }
+
+      input,
+      select {
+        min-height: 38px;
+        padding: 0 10px;
+      }
+
+      textarea {
+        min-height: 120px;
+        padding: 10px;
+        line-height: 1.6;
+        resize: vertical;
+      }
+
+      .content {
+        display: grid;
+        align-content: start;
+        gap: 12px;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        display: grid;
+        gap: 6px;
+        min-height: 78px;
+        padding: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .metric strong {
+        font-size: 26px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 820px;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      th {
+        background: #f9fbfb;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      tr[data-id] {
+        cursor: pointer;
+      }
+
+      tr.selected,
+      tr[data-id]:hover {
+        background: var(--brand-soft);
+      }
+
+      .title-cell {
+        display: grid;
+        gap: 4px;
+      }
+
+      .title-cell span,
+      .empty {
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-flex;
+        min-height: 24px;
+        align-items: center;
+        border-radius: 999px;
+        background: #eef3f4;
+        padding: 0 9px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .detail h2 {
+        font-size: 20px;
+        line-height: 1.5;
+      }
+
+      .detail a {
+        color: var(--brand);
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .editor-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      @media (max-width: 1100px) {
+        .layout {
+          grid-template-columns: 230px minmax(0, 1fr);
+        }
+
+        .detail {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 760px) {
+        header,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .metrics,
+        .editor-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <p class="eyebrow">Google Alerts Database</p>
+        <h1>業界情報チェック</h1>
+      </div>
+      <button id="importButton" class="button" type="button">取り込み</button>
+    </header>
+
+    <main class="layout">
+      <aside class="panel filters">
+        <label>
+          <span>検索</span>
+          <input id="searchInput" type="search" placeholder="キーワード、媒体、メモ" />
+        </label>
+        <label>
+          <span>ステータス</span>
+          <select id="statusFilter">
+            <option value="all">すべて</option>
+            <option>未確認</option>
+            <option>確認中</option>
+            <option>共有済み</option>
+            <option>保留</option>
+          </select>
+        </label>
+        <label>
+          <span>重要度</span>
+          <select id="priorityFilter">
+            <option value="all">すべて</option>
+            <option>高</option>
+            <option>中</option>
+            <option>低</option>
+          </select>
+        </label>
+      </aside>
+
+      <section class="content">
+        <section class="metrics">
+          <article class="metric"><span>全件</span><strong id="metricTotal">0</strong></article>
+          <article class="metric"><span>未確認</span><strong id="metricOpen">0</strong></article>
+          <article class="metric"><span>重要度 高</span><strong id="metricHigh">0</strong></article>
+          <article class="metric"><span>今週</span><strong id="metricWeek">0</strong></article>
+        </section>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>受信日</th>
+                <th>キーワード</th>
+                <th>タイトル</th>
+                <th>媒体</th>
+                <th>重要度</th>
+                <th>ステータス</th>
+                <th>担当</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="panel detail" id="detail">
+        <p class="empty">記事を選択</p>
+      </aside>
+    </main>
+
+    <script>
+      let records = [];
+      let selectedId = "";
+
+      const elements = {
+        rows: document.querySelector("#rows"),
+        detail: document.querySelector("#detail"),
+        importButton: document.querySelector("#importButton"),
+        searchInput: document.querySelector("#searchInput"),
+        statusFilter: document.querySelector("#statusFilter"),
+        priorityFilter: document.querySelector("#priorityFilter"),
+        metricTotal: document.querySelector("#metricTotal"),
+        metricOpen: document.querySelector("#metricOpen"),
+        metricHigh: document.querySelector("#metricHigh"),
+        metricWeek: document.querySelector("#metricWeek"),
+      };
+
+      elements.searchInput.addEventListener("input", render);
+      elements.statusFilter.addEventListener("change", render);
+      elements.priorityFilter.addEventListener("change", render);
+      elements.importButton.addEventListener("click", importNow);
+
+      loadRecords();
+
+      function loadRecords() {
+        google.script.run
+          .withSuccessHandler((data) => {
+            records = normalizeRecords(data || []);
+            selectedId = records[0]?.id || "";
+            render();
+          })
+          .listRecords();
+      }
+
+      function importNow() {
+        elements.importButton.disabled = true;
+        elements.importButton.textContent = "取込中";
+        google.script.run
+          .withSuccessHandler(() => {
+            elements.importButton.disabled = false;
+            elements.importButton.textContent = "取り込み";
+            loadRecords();
+          })
+          .withFailureHandler(() => {
+            elements.importButton.disabled = false;
+            elements.importButton.textContent = "取り込み";
+            alert("取り込みに失敗しました。権限とGmail検索条件を確認してください。");
+          })
+          .runImportNow();
+      }
+
+      function render() {
+        renderMetrics();
+        renderRows();
+        renderDetail();
+      }
+
+      function renderMetrics() {
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        elements.metricTotal.textContent = records.length;
+        elements.metricOpen.textContent = records.filter((item) => item.status === "未確認").length;
+        elements.metricHigh.textContent = records.filter((item) => item.priority === "高").length;
+        elements.metricWeek.textContent = records.filter((item) => new Date(item.receivedAt) >= weekAgo).length;
+      }
+
+      function renderRows() {
+        const rows = filteredRecords();
+        if (!rows.length) {
+          elements.rows.innerHTML = '<tr><td colspan="7">該当する記事がありません</td></tr>';
+          return;
+        }
+
+        elements.rows.innerHTML = rows
+          .map(
+            (item) => `
+              <tr data-id="${escapeHtml(item.id)}" class="${item.id === selectedId ? "selected" : ""}">
+                <td>${formatDate(item.receivedAt)}</td>
+                <td>${escapeHtml(item.alertKeyword)}</td>
+                <td><div class="title-cell"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.snippet)}</span></div></td>
+                <td>${escapeHtml(item.source)}</td>
+                <td><span class="pill">${escapeHtml(item.priority)}</span></td>
+                <td><span class="pill">${escapeHtml(item.status)}</span></td>
+                <td>${escapeHtml(item.owner || "未設定")}</td>
+              </tr>
+            `,
+          )
+          .join("");
+
+        elements.rows.querySelectorAll("tr[data-id]").forEach((row) => {
+          row.addEventListener("click", () => {
+            selectedId = row.dataset.id;
+            render();
+          });
+        });
+      }
+
+      function renderDetail() {
+        const item = records.find((record) => record.id === selectedId);
+        if (!item) {
+          elements.detail.innerHTML = '<p class="empty">記事を選択</p>';
+          return;
+        }
+
+        elements.detail.innerHTML = `
+          <p class="eyebrow">${escapeHtml(item.alertKeyword)}</p>
+          <h2>${escapeHtml(item.title)}</h2>
+          <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">記事を開く</a>
+          <p>${escapeHtml(item.snippet)}</p>
+          <div class="editor-grid">
+            <label><span>重要度</span><select id="detailPriority"><option>高</option><option>中</option><option>低</option></select></label>
+            <label><span>ステータス</span><select id="detailStatus"><option>未確認</option><option>確認中</option><option>共有済み</option><option>保留</option></select></label>
+            <label><span>担当</span><input id="detailOwner" type="text" /></label>
+            <label><span>タグ</span><input id="detailTags" type="text" /></label>
+          </div>
+          <label><span>メモ</span><textarea id="detailMemo"></textarea></label>
+        `;
+
+        document.querySelector("#detailPriority").value = item.priority || "中";
+        document.querySelector("#detailStatus").value = item.status || "未確認";
+        document.querySelector("#detailOwner").value = item.owner || "";
+        document.querySelector("#detailTags").value = item.tags || "";
+        document.querySelector("#detailMemo").value = item.memo || "";
+
+        ["#detailPriority", "#detailStatus", "#detailOwner", "#detailTags", "#detailMemo"].forEach((selector) => {
+          document.querySelector(selector).addEventListener("change", saveDetail);
+        });
+      }
+
+      function saveDetail() {
+        const index = records.findIndex((record) => record.id === selectedId);
+        if (index < 0) return;
+        const fields = {
+          priority: document.querySelector("#detailPriority").value,
+          status: document.querySelector("#detailStatus").value,
+          owner: document.querySelector("#detailOwner").value || "未設定",
+          tags: document.querySelector("#detailTags").value,
+          memo: document.querySelector("#detailMemo").value,
+        };
+        records[index] = { ...records[index], ...fields };
+        renderMetrics();
+        renderRows();
+        google.script.run.saveRecordFields(selectedId, fields);
+      }
+
+      function filteredRecords() {
+        const query = elements.searchInput.value.trim().toLowerCase();
+        return records
+          .filter((item) => {
+            if (elements.statusFilter.value !== "all" && item.status !== elements.statusFilter.value) return false;
+            if (elements.priorityFilter.value !== "all" && item.priority !== elements.priorityFilter.value) return false;
+            if (!query) return true;
+            return Object.values(item).join(" ").toLowerCase().includes(query);
+          })
+          .sort((a, b) => new Date(b.receivedAt) - new Date(a.receivedAt));
+      }
+
+      function normalizeRecords(data) {
+        return data.map((item, index) => ({
+          id: item.id || `row-${index + 1}`,
+          receivedAt: item.receivedAt || new Date().toISOString(),
+          alertKeyword: item.alertKeyword || "",
+          title: item.title || "(タイトルなし)",
+          source: item.source || "",
+          url: item.url || "#",
+          snippet: item.snippet || "",
+          status: item.status || "未確認",
+          priority: item.priority || "中",
+          owner: item.owner || "未設定",
+          category: item.category || "未分類",
+          tags: item.tags || "",
+          memo: item.memo || "",
+        }));
+      }
+
+      function formatDate(value) {
+        return new Intl.DateTimeFormat("ja-JP", { month: "2-digit", day: "2-digit" }).format(new Date(value));
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    </script>
+  </body>
+</html>
