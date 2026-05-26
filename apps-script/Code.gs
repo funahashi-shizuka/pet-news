@@ -29,6 +29,9 @@ function setup() {
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(HEADERS);
     sheet.setFrozenRows(1);
+    sheet.getRange("B:B").setNumberFormat("yyyy-mm-dd hh:mm");
+    sheet.getRange("N:N").setNumberFormat("yyyy-mm-dd");
+    sheet.getRange("O:O").setNumberFormat("yyyy-mm-dd hh:mm");
   }
 
   if (!GmailApp.getUserLabelByName(CONFIG.importedLabel)) {
@@ -113,7 +116,7 @@ function getImportedIds_(sheet) {
 }
 
 function parseAlertMessage_(message) {
-  const receivedAt = message.getDate().toISOString();
+  const receivedAt = message.getDate();
   const alertKeyword = parseKeyword_(message.getSubject());
   const html = message.getBody();
   const plain = normalizeText_(message.getPlainBody());
@@ -139,7 +142,7 @@ function parseAlertMessage_(message) {
       tags: "",
       memo: "",
       publishedAt: "",
-      importedAt: new Date().toISOString(),
+      importedAt: new Date(),
     };
   });
 }

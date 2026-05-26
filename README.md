@@ -8,6 +8,7 @@ GoogleアラートのメールをGoogleスプレッドシートに取り込み�
 - `apps-script/Code.gs`: GmailのGoogleアラートをスプレッドシートへ取り込むApps Script
 - `apps-script/Index.html`: チーム共有用のApps Script Webアプリ画面
 - `data/sample-alerts.csv`: CSV連携確認用のサンプル
+- `outputs/pet-news-template/pet-news-google-sheets-template.xlsx`: Google Sheetsへアップロードして使う運用テンプレート
 
 ## スプレッドシート列
 
@@ -19,7 +20,7 @@ id, receivedAt, alertKeyword, title, source, url, snippet, status, priority, own
 
 ## Googleアラート取り込み
 
-1. Googleスプレッドシートを新規作成する
+1. `outputs/pet-news-template/pet-news-google-sheets-template.xlsx` をGoogle Sheetsへアップロードする
 2. `拡張機能` から `Apps Script` を開く
 3. `apps-script/Code.gs` の内容を貼り付ける
 4. Apps ScriptでHTMLファイル `Index` を作り、`apps-script/Index.html` の内容を貼り付ける
