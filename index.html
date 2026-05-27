@@ -132,7 +132,8 @@
     </main>
 
     <script>
-      const SHEET_CSV_URL = "";
+      const SHEET_CSV_URL =
+        "https://docs.google.com/spreadsheets/d/1jQ_rzNqRXlF5C7KR-8wcTZ9a4d2tixQnk3HpJM5P2k0/gviz/tq?tqx=out:csv&sheet=%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9";
       const fallbackCsvUrl = "./data/news-template.csv";
       const params = new URLSearchParams(location.search);
       const csvUrl = params.get("csv") || SHEET_CSV_URL || fallbackCsvUrl;
