@@ -2,7 +2,7 @@ const SHEET_NAME = "ニュース";
 const IMPORTED_LABEL = "pet-news-imported";
 const GMAIL_QUERY =
   'from:(googlealerts-noreply@google.com) newer_than:30d -label:"pet-news-imported"';
-const HEADERS = ["受信日", "キーワード", "タイトル", "媒体", "URL", "概要", "メモ", "ステータス"];
+const HEADERS = ["受信日", "キーワード", "タイトル", "媒体", "URL", "概要"];
 
 function setup() {
   const sheet = getSheet_();
@@ -37,8 +37,6 @@ function importGoogleAlerts() {
             item.source,
             item.url,
             item.summary,
-            "",
-            "未確認",
           ]);
           existingUrls.add(item.url);
         }

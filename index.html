@@ -109,16 +109,6 @@
         text-decoration: none;
       }
 
-      .status {
-        display: inline-flex;
-        align-items: center;
-        min-height: 22px;
-        border-radius: 999px;
-        background: var(--soft);
-        color: var(--brand);
-        padding: 0 8px;
-      }
-
       .empty {
         padding: 28px;
         color: var(--muted);
@@ -169,7 +159,7 @@
       function render() {
         const query = document.querySelector("#search").value.trim().toLowerCase();
         const rows = news.filter((item) =>
-          [item.date, item.keyword, item.title, item.source, item.summary, item.memo, item.status]
+          [item.date, item.keyword, item.title, item.source, item.summary]
             .join(" ")
             .toLowerCase()
             .includes(query),
@@ -188,11 +178,9 @@
               <span>${escapeHtml(item.date)}</span>
               <span>${escapeHtml(item.keyword)}</span>
               <span>${escapeHtml(item.source)}</span>
-              <span class="status">${escapeHtml(item.status || "未確認")}</span>
             </div>
             <h2>${escapeHtml(item.title)}</h2>
             <p>${escapeHtml(item.summary)}</p>
-            ${item.memo ? `<p>${escapeHtml(item.memo)}</p>` : ""}
             ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">記事を開く</a>` : ""}
           </article>
         `;
@@ -206,8 +194,6 @@
           source: row["媒体"] || row.source || "",
           url: row.URL || row.url || "",
           summary: row["概要"] || row.summary || "",
-          memo: row["メモ"] || row.memo || "",
-          status: row["ステータス"] || row.status || "未確認",
         };
       }
 
