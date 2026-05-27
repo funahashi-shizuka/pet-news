@@ -1,58 +1,33 @@
-# 業界情報チェック MVP
+# ペット業界ニュース
 
-GoogleアラートのメールをGoogleスプレッドシートに取り込み、チームで確認するためのスターターキットです。
+Googleアラートのメールをスプレッドシートに入れて、HTMLでニュース一覧を見るだけのシンプルな構成です。
 
-## 構成
+## ファイル
 
-- `index.html` / `styles.css` / `app.js`: 閲覧ページ
-- `apps-script/Code.gs`: GmailのGoogleアラートをスプレッドシートへ取り込むApps Script
-- `apps-script/Index.html`: チーム共有用のApps Script Webアプリ画面
-- `data/sample-alerts.csv`: CSV連携確認用のサンプル
-- `outputs/pet-news-template/pet-news-google-sheets-template.xlsx`: Google Sheetsへアップロードして使う運用テンプレート
+- `index.html`: ニュース一覧ページ
+- `data/news-template.csv`: スプレッドシートの列見本
+- `apps-script/Code.gs`: Googleアラートメールをスプレッドシートへ入れる最小スクリプト
 
-## スプレッドシート列
+## スプレッドシート
 
-Apps Scriptは次の列で `alerts` シートを作ります。
+シート名は `ニュース` にします。スプレッドシートはデータベース扱いなので、列はこの8つだけです。
 
-```text
-id, receivedAt, alertKeyword, title, source, url, snippet, status, priority, owner, category, tags, memo, publishedAt, importedAt
-```
+| 受信日 | キーワード | タイトル | 媒体 | URL | 概要 | メモ | ステータス |
+|---|---|---|---|---|---|---|---|
 
-## Googleアラート取り込み
+## Gmailから取り込む
 
-1. `outputs/pet-news-template/pet-news-google-sheets-template.xlsx` をGoogle Sheetsへアップロードする
+1. Googleスプレッドシートを作る
 2. `拡張機能` から `Apps Script` を開く
-3. `apps-script/Code.gs` の内容を貼り付ける
-4. Apps ScriptでHTMLファイル `Index` を作り、`apps-script/Index.html` の内容を貼り付ける
-5. `setup` を実行して権限を許可する
-6. `importGoogleAlerts` を実行する
-7. 自動取り込みにする場合は `createHourlyTrigger` を一度だけ実行する
-8. `デプロイ` からWebアプリとして公開する
+3. `apps-script/Code.gs` を貼り付ける
+4. `setup` を実行する
+5. `importGoogleAlerts` を実行する
+6. 自動化する場合だけ `createHourlyTrigger` を一度実行する
 
-対象メールは `CONFIG.gmailQuery` で調整できます。最初はGoogleアラートのメールだけを拾う設定です。
+## HTMLで見る
 
-## 閲覧ページの使い方
+スプレッドシートをCSV公開して、そのURLを `index.html` の `SHEET_CSV_URL` に入れます。
 
-ローカル確認:
+ローカルではサンプルCSVを表示します。
 
-```powershell
-python -m http.server 8080
-```
-
-ブラウザで `http://localhost:8080/industry-info-hub/` を開きます。
-
-スプレッドシート連携:
-
-1. `alerts` シートをCSV形式で公開する
-2. 公開CSVのURLを画面右上の `CSV URL` に入れる
-3. `読み込み` を押す
-
-ローカル版で編集したステータス、重要度、担当、タグ、メモはブラウザのローカル保存です。チームで同じ編集内容を共有する場合は、Apps Script版のWebアプリを使います。
-
-## 次に固めるところ
-
-- Googleアラートの検索キーワード一覧
-- カテゴリの標準値
-- 重要度の判断基準
-- 誰が週次で確認するか
-- スプレッドシートだけで運用するか、別DBに移すか
+`?csv=公開CSVのURL` を付けても読み込めます。
