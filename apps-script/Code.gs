@@ -1,3 +1,4 @@
+const SPREADSHEET_ID = "1jQ_rzNqRXlF5C7KR-8wcTZ9a4d2tixQnk3HpJM5P2k0";
 const SHEET_NAME = "ニュース";
 const IMPORTED_LABEL = "pet-news-imported";
 const GMAIL_QUERY =
@@ -52,12 +53,38 @@ function importGoogleAlerts() {
   return { imported: rows.length, checkedThreads: threads.length };
 }
 
+function previewGoogleAlerts() {
+  setup();
+
+  const query = 'from:(googlealerts-noreply@google.com) newer_than:30d';
+  const threads = GmailApp.search(query, 0, 5);
+  const items = [];
+
+  threads.forEach((thread) => {
+    thread.getMessages().forEach((message) => {
+      parseAlertMessage_(message).forEach((item) => {
+        items.push([
+          item.date,
+          item.keyword,
+          item.title,
+          item.source,
+          item.url,
+          item.summary,
+        ]);
+      });
+    });
+  });
+
+  Logger.log(JSON.stringify(items.slice(0, 20), null, 2));
+  return { parsedItems: items.length, previewRows: items.slice(0, 20) };
+}
+
 function createHourlyTrigger() {
   ScriptApp.newTrigger("importGoogleAlerts").timeBased().everyHours(1).create();
 }
 
 function getSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   return ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
 }
 

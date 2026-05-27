@@ -21,8 +21,9 @@ Googleアラートのメールをスプレッドシートに入れて、HTMLで�
 2. `拡張機能` から `Apps Script` を開く
 3. `apps-script/Code.gs` を貼り付ける
 4. `setup` を実行する
-5. `importGoogleAlerts` を実行する
-6. 自動化する場合だけ `createHourlyTrigger` を一度実行する
+5. `previewGoogleAlerts` を実行して、分解結果をログで確認する
+6. 問題なければ `importGoogleAlerts` を実行する
+7. 自動化する場合だけ `createHourlyTrigger` を一度実行する
 
 ## HTMLで見る
 
